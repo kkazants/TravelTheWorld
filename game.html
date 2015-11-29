@@ -1,0 +1,141 @@
+<html>
+	<head>
+		<script src="raphael-min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		<script>
+            // var for X
+			var seed;
+			var out0;
+			var out1;
+            // var for Y
+            var seedY;
+            var y0;
+            var y1;
+            
+            var points = [{x:9,y:2},{x:9,y:-7},{x:0,y:0},{x:-7,y:3},{x:5,y:-8},{x:12,y:-9},{x:1,y:7},{x:-4,y:-16},{x:-16,y:-16}];
+            var len = points.length;
+            var point1 = points[Math.floor(Math.random()*len)];
+            var point2 = points[Math.floor(Math.random()*len)];
+            while (point1 == point2){
+                point2 = points[Math.floor(Math.random()*len)];
+            }
+            
+			$(document).ready(function() {
+				//seed for X;
+				var sign;
+				var switchbox;
+				var temp;
+                // seed for Y;
+                var signY;
+                var switchboxY;
+
+				var paper = Raphael((window.innerWidth/2-500), 100, 1000, 600);
+				//set paper background
+				var img = paper.image("map.png", 0, 0, 1000, 600);
+				//img.attr({ "clip-rect": "20,20,30,30" });
+				//grid
+				//horizontal lines
+				for(var i = 40; i <= 580; i=i+20){
+					var phrase = "M10," + i + " L900," + i + "";
+					var line = paper.path( phrase );
+					line.attr ("stroke", "#000");
+					//numbers
+					paper.text(10, i*2, (i/10)-20).attr({fill:"white", "font-size":16})
+				}
+				//vertical lines
+				for(var i = 40; i <= 900; i=i+20){
+					var phrase = "M" + i + ", 20 L" + i +", 900";
+					var line = paper.path( phrase );
+					line.attr ("stroke", "#000");
+					if(((i-10)/20) <=20){
+						paper.text(i*2, 10, (i/10)-20).attr({fill:"white", "font-size":16})
+					}
+				}
+
+                // For X
+                // random # for answer
+			    seed = point1.x;
+                // create second#
+                out0 = point2.x;
+                // second# = answer - first#
+			    out1 = seed - out0;
+                
+                // For Y:
+                seedY = point1.y;
+                y0 = point2.y;
+                // get second#
+                y1 = seedY - y0;
+
+                // circle(x, y, radius)
+			    var circle = paper.circle(((out0*20)+400), (y0*20)+400, 10);
+				circle.attr("fill", "blue");
+
+                // X: first number
+			    document.getElementById("out0").value = out0;
+                // X: second number
+			    document.getElementById("out1").value = out1;
+                // print the answer (TESTING)
+			    document.getElementById("input").value = seed;
+                // Y: first number
+                document.getElementById("y0").value = y0;
+                // Y: second number
+                document.getElementById("y1").value = y1;
+                // print the answer (TESTING)
+                document.getElementById("yput").value = seedY;
+
+			});
+
+			function myFunction(){
+				document.getElementById("correct").style.display = "none";
+				document.getElementById("wrong").style.display = "none";
+				var userAnswer = document.getElementById("input").value;
+                var userYAnswer = document.getElementById("yput").value;
+				var paper = Raphael((window.innerWidth/2-500), 100, 1000, 600);
+				if(userAnswer == seed && userYAnswer == seedY){
+					document.getElementById("correct").style.display = "";
+					var anim = Raphael.animation({cx: ((userAnswer*20)+400), cy: (userYAnswer*20)+400}, 2e3);
+					var circle = paper.circle((out0*20)+400, (y0*20)+400, 10);
+					circle.attr("fill", "green");
+					circle.animate(anim);
+				} else {
+					document.getElementById("wrong").style.display = "";
+					var anim = Raphael.animation({cx: ((userAnswer*20)+400), cy: (userYAnswer*20)+400}, 2e3);
+					var circle = paper.circle((out0*20)+400, (y0*20)+400, 10);
+					circle.attr("fill", "red");
+					circle.animate(anim);
+				}
+			}
+		</script>
+	</head>
+	<body style="background-color: black; color: limegreen;">
+		<div class="container" style="width: 700px; margin-left: auto; margin-right: auto; margin-top: 20px;">
+			<div class="output" style="float: left;">
+				X: <input id="out0" type="text" name="out0" value="" readonly> + <input id="out1" type="text" name="out1" value="" readonly>
+                </br>
+                Y: <input id="y0" type="text" name="y0" value="" readonly> + <input id="y1" type="text" name="y1" value="" readonly>
+			</div>
+			<div class="input" style="float: left;">
+				&nbsp;= <input id="input" type="text" name="answer" value="">
+			</div>
+            <div class="yput" style="float: left;">
+                &nbsp;= <input id="yput" type="text" name="answerY" value"">
+			     <div style="float: right;">
+			     <i class="fa fa-check" id="correct" style="display: none; color: limegreen; font-size: 28px;"></i><i class="fa fa-times" id="wrong" style="display: none; color: red; font-size: 28px;"></i>
+			     </div>
+                <!-- call on function -->
+                <button onmousedown="myFunction()">Submit</button>
+            </div>
+        
+        </div>
+        <div class="navigate" style="width: 200px; margin-left: auto; margin-right: auto; margin-top: 650px;">
+            <!-- Go home -->
+            <button onclick="location.href='index.html'">Home</button>
+            <!-- Help button -->
+            <button onclick="location.href='help.html'">Help</button>
+            <!-- Next problem -->
+            <button onclick="location.href='game.html'">Next<span>&#8594;</span></button>
+        </div>
+	</body>
+</html>
