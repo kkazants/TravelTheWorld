@@ -69,16 +69,19 @@
                 // create second#
                 out0 = point2.x;
                 // point3.x
-                p3x = point3.x;
+                p3x = out0 - point3.x;
                 // second# = answer - first# - point3.x
 			    out1 = seed - out0 - p3x;
+		// d1 = point1.x - point2.x
+		// d2 = point2.x - point3.x
+		// d1 = point1.x - point2.x - d2
                 
                 // For Y:
                 seedY = point1.y;
                 // point2
                 y0 = point2.y;
                 // point3.y
-                p3y = point3.y;
+                p3y = y0 - point3.y;
                 // get second# = answer - first# - point3.y
                 y1 = seedY - y0 - p3y;
 
